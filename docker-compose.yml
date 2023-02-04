@@ -1,0 +1,31 @@
+version: "3"
+
+services:  
+  db:
+    container_name: dbngdj
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sidny  
+  dj:
+    container_name: dj
+    build: 
+      context: django
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:80
+    volumes:
+      - ./django:/code
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SETTINGS=dev
+  ng:
+    container_name: ng
+    build:
+      context: angular
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
